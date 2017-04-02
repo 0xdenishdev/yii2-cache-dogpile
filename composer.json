@@ -1,0 +1,25 @@
+{
+  "name": "hexspeak/yii2-memcache-dogpile",
+  "description": "Yii2 memcache module designed for solving dogpile cache issues.",
+  "keywords": [
+    "yii2",
+    "memcache",
+    "dogpile"
+  ],
+  "type": "module",
+  "authors": [
+    {
+      "name": "Denis Horobtsov",
+      "email": "denis@0xhexspeak.cf"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*",
+    "php": ">=5.5.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "Hexspeak\\Dogpile\\": "src/Dogpile"
+    }
+  }
+}
