@@ -7,7 +7,7 @@ namespace Hexspeak\Dogpile\Mutexes;
  *
  * @package Hexspeak\Dogpile\Mutexes
  */
-abstract class MutexAbstract
+abstract class MutexAbstract implements MutexAccessorInterface
 {
     /**
      * Defines default mutex cache key prefix.
