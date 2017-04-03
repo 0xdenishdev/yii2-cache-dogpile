@@ -3,14 +3,7 @@
 namespace Hexspeak\Dogpile;
 
 use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\caching\Cache as CacheStorage;
-
-use Hexspeak\Dogpile\Storage\StorageInterface;
-use Hexspeak\Dogpile\Services\CacheService;
-use Hexspeak\Dogpile\Services\CacheServiceInterface;
-use Hexspeak\Dogpile\Accessors\CacheServiceAccessorInterface;
-
+use Hexspeak\Dogpile\Services\AbstractCacheService;
 use cheatsheet\Time;
 
 /**
@@ -19,7 +12,7 @@ use cheatsheet\Time;
  *
  * @package Hexspeak\Dogpile
  */
-class Cache extends Component implements StorageInterface, CacheServiceAccessorInterface
+class Cache extends Component
 {
     /**
      * Defines cache lifetime.
@@ -29,70 +22,33 @@ class Cache extends Component implements StorageInterface, CacheServiceAccessorI
     public $ttl = Time::SECONDS_IN_A_MINUTE;
 
     /**
-     * Defines an abstract storage
+     * Defines cache engine.
      *
-     * @var \yii\caching\Cache $storage
+     * @var null|\yii\caching\Cache $engine
      */
-    protected $storage;
+    public $engine = null;
 
     /**
-     * Defines cache service.
+     * Defines cache service accessor.
      *
-     * @var CacheServiceInterface $cacheService
+     * @var AbstractCacheService $cacheService
      */
     protected $cacheService;
 
-    /**
-     * Initializes this application component.
-     * It creates the cache service manager instance.
-     */
-    public function init()
+    public function __construct(AbstractCacheService $cacheAccessor, array $config = [])
     {
-        parent::init();
-        $this->cacheService = new CacheService();
+//        $this->engine = '\yii\caching\MemCache';
+        $this->cacheService = $cacheAccessor;
+        $this->cacheService->setCacheEngine(new $this->engine);
+        parent::__construct($config);
     }
 
     /**
-     * @inheritdoc
+     * Returns cache service.
+     *
+     * @return AbstractCacheService
      */
-    public function setStorage(CacheStorage $cacheStorage)
-    {
-        $this->storage = $cacheStorage;
-        return $this;
-    }
-
     public function getCacheService()
-    {
-        return $this->cacheService;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getStorage()
-    {
-        if (is_null($this->storage)) {
-            throw new InvalidConfigException(
-                'Cache storage was not properly configured. Specify a valid storage class.'
-            );
-        }
-
-        return $this->storage;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setService(CacheServiceInterface $cacheService)
-    {
-        $this->cacheService = $cacheService;
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getService()
     {
         return $this->cacheService;
     }
