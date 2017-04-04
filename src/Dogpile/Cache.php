@@ -3,8 +3,7 @@
 namespace Hexspeak\Dogpile;
 
 use yii\base\Component;
-use Hexspeak\Dogpile\Services\AbstractCacheService;
-use cheatsheet\Time;
+use Hexspeak\Dogpile\Services\CacheServiceAbstract;
 
 /**
  * Class Cache.
@@ -15,40 +14,46 @@ use cheatsheet\Time;
 class Cache extends Component
 {
     /**
-     * Defines cache lifetime.
+     * Defines mutex accessor.
      *
-     * @var integer $ttl
+     * @var array $mutexAccessor
      */
-    public $ttl = Time::SECONDS_IN_A_MINUTE;
+    public $mutexAccessor = [];
 
     /**
-     * Defines cache engine.
+     * Defines default cache component.
      *
-     * @var null|\yii\caching\Cache $engine
+     * @var string $useComponent
      */
-    public $engine = null;
+    public $useComponent  = 'cache';
 
     /**
      * Defines cache service accessor.
      *
-     * @var AbstractCacheService $cacheService
+     * @var CacheServiceAbstract $cacheService
      */
-    protected $cacheService;
+    protected $cacheService = null;
 
-    public function __construct(AbstractCacheService $cacheAccessor, array $config = [])
+    /**
+     * Cache constructor.
+     *
+     * @param CacheServiceAbstract $cacheAccessor
+     * @param array $config
+     */
+    public function __construct(CacheServiceAbstract $cacheAccessor, array $config = [])
     {
-//        $this->engine = '\yii\caching\MemCache';
-        $this->cacheService = $cacheAccessor;
-        $this->cacheService->setCacheEngine(new $this->engine);
         parent::__construct($config);
+        $this->cacheService  = $cacheAccessor;
+        $this->cacheService->initMutex($this->mutexAccessor);
+        $this->cacheService->setCacheEngine(\yii::$app->{$this->useComponent});
     }
 
     /**
      * Returns cache service.
      *
-     * @return AbstractCacheService
+     * @return CacheServiceAbstract
      */
-    public function getCacheService()
+    public function getCacheAccessor()
     {
         return $this->cacheService;
     }

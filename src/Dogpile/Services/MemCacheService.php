@@ -2,30 +2,51 @@
 
 namespace Hexspeak\Dogpile\Services;
 
-use yii\caching\Cache;
-
 /**
  * Class MemCacheService.
+ * Defines a memcached implementation of preventing an anti dogpile effect.
  *
  * @package Hexspeak\Dogpile\Services
  */
-class MemCacheService extends AbstractCacheService
+class MemCacheService extends CacheServiceAbstract
 {
     /**
      * @inheritdoc
      */
-    function setCacheEngine(Cache $cache)
+    public function set($key, $value, $ttl = 0)
     {
-        $this->cacheEngine = $cache;
+        // TODO: Implement set() method.
     }
 
     /**
      * @inheritdoc
      */
-    function getCacheEngine()
+    public function setPersistent($key, $value, $ttl = 0)
     {
-        return $this->cacheEngine;
+        // TODO: Implement setPersistent() method.
     }
 
-    // TODO: Implement cache locking functionality here.
+    /**
+     * @inheritdoc
+     */
+    public function get($key)
+    {
+        // TODO: Implement get() method.
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPersistent($key)
+    {
+        // TODO: Implement getPersistent() method.
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isExpired($key)
+    {
+        // TODO: Implement isExpired() method.
+    }
 }
