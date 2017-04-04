@@ -4,7 +4,7 @@ namespace Hexspeak\Dogpile\Services;
 
 /**
  * Class MemCacheService.
- * Defines a memcached implementation of preventing an anti dogpile effect.
+ * Defines a memcached implementation of preventing an dogpile effect.
  *
  * @package Hexspeak\Dogpile\Services
  */
