@@ -2,11 +2,9 @@
 
 namespace Hexspeak\Dogpile\Mutexes;
 
-use yii\caching\Cache;
-
 /**
  * Class Mutex.
- * Defines a default behaviour of mutex.
+ * Defines a default mutex behaviour.
  *
  * @package Hexspeak\Dogpile\Mutexes
  */
@@ -15,27 +13,44 @@ class MutexAccessor extends MutexAccessorAbstract
     /**
      * @inheritdoc
      */
-    public function lock(Cache $cache, $key)
+    public function lock($key)
     {
         $mutexKey = $this->generateKey($key);
-        return $cache->set($mutexKey, MutexConfig::IS_LOCKED);
+        return $this->getCacheEngine()->set($mutexKey, MutexConfig::IS_LOCKED);
     }
 
     /**
      * @inheritdoc
      */
-    public function unlock(Cache $cache, $key)
+    public function unlock($key)
     {
         $mutexKey = $this->generateKey($key);
-        return $cache->set($mutexKey, MutexConfig::IS_UNLOCKED);
+        return $this->getCacheEngine()->set($mutexKey, MutexConfig::IS_UNLOCKED, $this->getLockKeyTtl());
     }
 
     /**
      * @inheritdoc
      */
-    public function isReleased(Cache $cache, $key)
+    public function isReleased($key)
     {
         $mutexKey = $this->generateKey($key);
-        return $cache->get($mutexKey);
+        return $this->getCacheEngine()->get($mutexKey);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function waitForUnlock($key)
+    {
+        $isUnlocked = $this->isReleased($key);
+        $sleepTime  = $this->getWaitInterval();
+        $totalSlept = 0;
+
+        while (! $isUnlocked && $this->getTimeToWait() > $totalSlept ) {
+            $totalSlept += $this->getWaitInterval();
+            usleep($sleepTime);
+        }
+
+        return $totalSlept < $this->getTimeToWait();
     }
 }

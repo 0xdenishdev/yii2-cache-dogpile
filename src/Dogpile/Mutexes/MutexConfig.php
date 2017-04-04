@@ -19,6 +19,9 @@ class MutexConfig
     /** Defines mutex interval key. */
     const ACCESSOR_INTERVAL_KEY  = 'timeInterval';
 
+    /** Defines lock's time to live key. */
+    const ACCESSOR_LOCK_TTL_KEY  = 'lockTtl';
+
     /** Defines mutex default class name. */
     const ACCESSOR_DEFAULT_CLASS = '\Hexspeak\Dogpile\Mutexes\MutexAccessor';
 

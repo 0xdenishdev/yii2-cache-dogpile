@@ -9,7 +9,7 @@ use yii\caching\Cache;
  *
  * @package Hexspeak\Dogpile\Mutexes
  */
-abstract class MutexAccessorAbstract
+abstract class MutexAccessorAbstract implements MutexAccessorInterface
 {
     /**
      * Defines default mutex cache key prefix.
@@ -33,6 +33,21 @@ abstract class MutexAccessorAbstract
      * @var int $waitInterval
      */
     protected $_waitInterval    = 300;
+
+
+    /**
+     * Defines default time to live for a lock key.
+     *
+     * @var int $_lockTtl
+     */
+    protected $_lockTtl         = 3600;
+
+    /**
+     * Defines cache engine.
+     *
+     * @var Cache|null
+     */
+    protected $_cacheEngine = null;
 
     /**
      * Sets wait interval.
@@ -75,6 +90,16 @@ abstract class MutexAccessorAbstract
     }
 
     /**
+     * Sets mutex key prefix.
+     *
+     * @param string|int $prefix
+     */
+    public function setKeyPrefix($prefix)
+    {
+        $this->_mutexKeyPrefix = $prefix;
+    }
+
+    /**
      * Returns mutex key prefix.
      *
      * @return string
@@ -85,13 +110,43 @@ abstract class MutexAccessorAbstract
     }
 
     /**
-     * Sets mutex key prefix.
+     * Sets lock key time to live.
      *
-     * @param string|int $prefix
+     * @param int $ttl
      */
-    public function setKeyPrefix($prefix)
+    public function setLockKeyTtl($ttl)
     {
-        $this->_mutexKeyPrefix = $prefix;
+        $this->_lockTtl = $ttl;
+    }
+
+    /**
+     * Returns lock key time to live.
+     *
+     * @return int
+     */
+    public function getLockKeyTtl()
+    {
+        return $this->_lockTtl;
+    }
+
+    /**
+     * Returns cache engine.
+     *
+     * @return null|Cache
+     */
+    public function getCacheEngine()
+    {
+        return $this->_cacheEngine;
+    }
+
+    /**
+     * Sets cache engine.
+     *
+     * @param Cache $cache
+     */
+    public function setCacheEngine(Cache $cache)
+    {
+        $this->_cacheEngine = $cache;
     }
 
     /**
@@ -106,29 +161,14 @@ abstract class MutexAccessorAbstract
     }
 
     /**
-     * Describes a behaviour of mutex lock.
+     * Generates backup cache key.
      *
-     * @param Cache $cache
-     * @param mixed $key
-     * @return bool
+     * @param string $backupKey
+     * @param mixed $cacheKey
+     * @return string
      */
-    abstract public function lock(Cache $cache, $key);
-
-    /**
-     * Describes a behaviour of mutex unlock.
-     *
-     * @param Cache $cache
-     * @param mixed $key
-     * @return bool
-     */
-    abstract public function unlock(Cache $cache, $key);
-
-    /**
-     * Returns true whether a mutex is released.
-     *
-     * @param Cache $cache
-     * @param mixed $key
-     * @return bool
-     */
-    abstract public function isReleased(Cache $cache, $key);
+    public function generateBackupKey($backupKey, $cacheKey)
+    {
+        return $backupKey . $cacheKey;
+    }
 }

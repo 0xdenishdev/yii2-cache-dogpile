@@ -15,7 +15,19 @@ class MemCacheService extends CacheServiceAbstract
      */
     public function set($key, $value, $ttl = 0)
     {
-        // TODO: Implement set() method.
+        $cache = $this->getCacheEngine();
+        $mutex = $this->getMutex();
+
+        $isReleased = $mutex->waitForUnlock($key);
+        if ($isReleased) {
+            $mutex->lock($key);
+            $cache->set($key, $this->assembleValue($value, $ttl));
+            $mutex->unlock($key);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -23,7 +35,23 @@ class MemCacheService extends CacheServiceAbstract
      */
     public function setPersistent($key, $value, $ttl = 0)
     {
-        // TODO: Implement setPersistent() method.
+        $cache  = $this->getCacheEngine();
+        $mutex  = $this->getMutex();
+        $backup = $mutex->generateBackupKey($this->getBackupKeyPrefix(), $key);
+
+        $isReleased = $mutex->waitForUnlock($key);
+        if ($isReleased) {
+            $mutex->lock($key);
+
+            $cache->set($key, $this->assembleValue($value, $ttl));
+            $cache->set($backup, $this->assembleValue($cache));
+
+            $mutex->unlock($key);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -31,7 +59,25 @@ class MemCacheService extends CacheServiceAbstract
      */
     public function get($key)
     {
-        // TODO: Implement get() method.
+        $cache = $this->getCacheEngine();
+        $mutex = $this->getMutex();
+
+        $isReleased = $mutex->waitForUnlock($key);
+        if ($isReleased) {
+            $mutex->lock($key);
+            if ($this->isExpired($key)) {
+                $mutex->unlock($key);
+                $cache->delete($key);
+                return false;
+            }
+
+            $cached = $cache->get($key);
+            $mutex->unlock($key);
+
+            return $cached['data'];
+        }
+
+        return false;
     }
 
     /**
@@ -39,14 +85,26 @@ class MemCacheService extends CacheServiceAbstract
      */
     public function getPersistent($key)
     {
-        // TODO: Implement getPersistent() method.
-    }
+        $cache  = $this->getCacheEngine();
+        $mutex  = $this->getMutex();
+        $backup = $mutex->generateBackupKey($this->getBackupKeyPrefix(), $key);
 
-    /**
-     * @inheritdoc
-     */
-    public function isExpired($key)
-    {
-        // TODO: Implement isExpired() method.
+        $isReleased = $mutex->waitForUnlock($key);
+        if ($isReleased) {
+            $mutex->lock($key);
+            if ($this->isExpired($key)) {
+                $mutex->unlock($key);
+                $cache->delete($key);
+                return false;
+            }
+
+            $cached = $cache->get($key);
+            $mutex->unlock($key);
+
+            return $cached['data'];
+        }
+
+        $cached = $cache->get($backup);
+        return $cached['data'];
     }
 }

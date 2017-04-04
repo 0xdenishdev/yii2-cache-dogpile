@@ -58,6 +58,26 @@ abstract class CacheServiceAbstract implements CacheServiceInterface
     }
 
     /**
+     * Sets backup cache key prefix.
+     *
+     * @param string $prefix
+     */
+    public function setBackupKeyPrefix($prefix)
+    {
+        $this->_backupKeyPrefix = $prefix;
+    }
+
+    /**
+     * Returns backup cache key prefix.
+     *
+     * @return string
+     */
+    public function getBackupKeyPrefix()
+    {
+        return $this->_backupKeyPrefix;
+    }
+
+    /**
      * Returns mutex accessor.
      *
      * @return MutexAccessorAbstract
@@ -65,6 +85,30 @@ abstract class CacheServiceAbstract implements CacheServiceInterface
     public function getMutex()
     {
         return $this->_mutex;
+    }
+
+    /**
+     * Returns cache value composed with expire data.
+     *
+     * @param mixed $cacheValue
+     * @param int $ttl
+     * @return array
+     */
+    public function assembleValue($cacheValue, $ttl = 0)
+    {
+        return [
+            'data'       => $cacheValue,
+            'expires_in' => time() + $ttl
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isExpired($key)
+    {
+        $cached = $this->_cacheEngine->get($key);
+        return $cached['expires_in'] > time();
     }
 
     /**
@@ -97,6 +141,12 @@ abstract class CacheServiceAbstract implements CacheServiceInterface
             isset($mutexAccessorConfig[MutexConfig::ACCESSOR_WAIT_KEY])
                 ? $mutexAccessorConfig[MutexConfig::ACCESSOR_WAIT_KEY]
                 : $mutex->getWaitInterval()
+        );
+
+        $mutex->setLockKeyTtl(
+            isset($mutexAccessorConfig[MutexConfig::ACCESSOR_LOCK_TTL_KEY])
+                ? $mutexAccessorConfig[MutexConfig::ACCESSOR_LOCK_TTL_KEY]
+                : $mutex->getLockKeyTtl()
         );
 
         $this->_mutex = $mutex;
