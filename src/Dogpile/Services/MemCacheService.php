@@ -93,8 +93,8 @@ class MemCacheService extends CacheServiceAbstract
         if ($isReleased) {
             $mutex->lock($key);
             if ($this->isExpired($key)) {
-                $mutex->unlock($key);
                 $cache->delete($key);
+                $mutex->unlock($key);
                 return false;
             }
 
