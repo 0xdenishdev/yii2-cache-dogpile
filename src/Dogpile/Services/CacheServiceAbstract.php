@@ -38,44 +38,29 @@ abstract class CacheServiceAbstract implements CacheServiceInterface
     protected $_backupKeyPrefix = 'backup_';
 
     /**
-     * Sets cache engine.
+     * Time interval for backuping a cache value.
      *
-     * @param Cache $cache
+     * @var int $_backupInterval
      */
-    public function setCacheEngine(Cache $cache)
-    {
-        $this->_cacheEngine = $cache;
-    }
+    protected $_backupInterval;
 
-    /**
-     * Returns cache engine.
-     *
-     * @return Cache
-     */
-    public function getCacheEngine()
-    {
-        return $this->_cacheEngine;
-    }
+    /** Sets cache engine. @param Cache $cache */
+    public function setCacheEngine(Cache $cache) {$this->_cacheEngine = $cache;}
 
-    /**
-     * Sets backup cache key prefix.
-     *
-     * @param string $prefix
-     */
-    public function setBackupKeyPrefix($prefix)
-    {
-        $this->_backupKeyPrefix = $prefix;
-    }
+    /** Returns cache engine. @return Cache */
+    public function getCacheEngine() {return $this->_cacheEngine;}
 
-    /**
-     * Returns backup cache key prefix.
-     *
-     * @return string
-     */
-    public function getBackupKeyPrefix()
-    {
-        return $this->_backupKeyPrefix;
-    }
+    /* Sets backup cache key prefix. @param string $prefix */
+    public function setBackupKeyPrefix($prefix) {$this->_backupKeyPrefix = $prefix;}
+
+    /** Returns backup cache key prefix. @return string */
+    public function getBackupKeyPrefix() {return $this->_backupKeyPrefix;}
+
+    /** Sets backup time interval. @param int $ttl */
+    public function setBackupInterval($ttl) {$this->_backupInterval = $ttl;}
+
+    /** Returns backup time interval. @return int */
+    public function getBackupInterval() {return $this->_backupInterval;}
 
     /**
      * Returns mutex accessor.

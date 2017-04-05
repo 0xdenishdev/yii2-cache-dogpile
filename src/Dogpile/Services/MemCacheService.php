@@ -44,7 +44,7 @@ class MemCacheService extends CacheServiceAbstract
             $mutex->lock($key);
 
             $cache->set($key, $this->assembleValue($value, $ttl));
-            $cache->set($backup, $this->assembleValue($cache));
+            $cache->set($backup, $this->assembleValue($cache), $this->getBackupInterval());
 
             $mutex->unlock($key);
 

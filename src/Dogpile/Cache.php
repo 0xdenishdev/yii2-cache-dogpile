@@ -28,6 +28,13 @@ class Cache extends Component
     public $useComponent  = 'cache';
 
     /**
+     * Time interval for backuping a cache value in case of using persistent set/get mode.
+     *
+     * @var int $backupInterval
+     */
+    public $backupInterval = 10;
+
+    /**
      * Defines cache service accessor.
      *
      * @var CacheServiceAbstract $cacheService
@@ -45,6 +52,7 @@ class Cache extends Component
         parent::__construct($config);
         $this->cacheService  = $cacheAccessor;
         $this->cacheService->initMutex($this->mutexAccessor);
+        $this->cacheService->setBackupInterval($this->backupInterval);
         $this->cacheService->setCacheEngine(\yii::$app->{$this->useComponent});
     }
 

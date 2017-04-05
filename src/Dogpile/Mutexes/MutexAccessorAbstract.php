@@ -49,105 +49,35 @@ abstract class MutexAccessorAbstract implements MutexAccessorInterface
      */
     protected $_cacheEngine = null;
 
-    /**
-     * Sets wait interval.
-     *
-     * @param int $waitInterval
-     */
-    public function setWaitInterval($waitInterval)
-    {
-        $this->_waitInterval = $waitInterval;
-    }
+    /** Sets wait interval. @param int $waitInterval */
+    public function setWaitInterval($waitInterval) {$this->_waitInterval = $waitInterval;}
 
-    /**
-     * Returns wait interval.
-     *
-     * @return int
-     */
-    public function getWaitInterval()
-    {
-        return $this->_waitInterval;
-    }
+    /** Returns wait interval. @return int */
+    public function getWaitInterval() {return $this->_waitInterval;}
 
-    /**
-     * Sets time to wait.
-     *
-     * @param int $timeToWait
-     */
-    public function setTimeToWait($timeToWait)
-    {
-        $this->_timeToWait = $timeToWait;
-    }
+    /** Sets time to wait. @param int $timeToWait */
+    public function setTimeToWait($timeToWait) {$this->_timeToWait = $timeToWait;}
 
-    /**
-     * Returns time to wait.
-     *
-     * @return int
-     */
-    public function getTimeToWait()
-    {
-        return $this->_timeToWait;
-    }
+    /** Returns time to wait. @return int */
+    public function getTimeToWait() {return $this->_timeToWait;}
 
-    /**
-     * Sets mutex key prefix.
-     *
-     * @param string|int $prefix
-     */
-    public function setKeyPrefix($prefix)
-    {
-        $this->_mutexKeyPrefix = $prefix;
-    }
+    /** Sets mutex key prefix. @param string|int $prefix */
+    public function setKeyPrefix($prefix) {$this->_mutexKeyPrefix = $prefix;}
 
-    /**
-     * Returns mutex key prefix.
-     *
-     * @return string
-     */
-    public function getKeyPrefix()
-    {
-        return $this->_mutexKeyPrefix;
-    }
+    /** Returns mutex key prefix. @return string */
+    public function getKeyPrefix() {return $this->_mutexKeyPrefix;}
 
-    /**
-     * Sets lock key time to live.
-     *
-     * @param int $ttl
-     */
-    public function setLockKeyTtl($ttl)
-    {
-        $this->_lockTtl = $ttl;
-    }
+    /** Sets lock key time to live. @param int $ttl */
+    public function setLockKeyTtl($ttl) {$this->_lockTtl = $ttl;}
 
-    /**
-     * Returns lock key time to live.
-     *
-     * @return int
-     */
-    public function getLockKeyTtl()
-    {
-        return $this->_lockTtl;
-    }
+    /** Returns lock key time to live. @return int */
+    public function getLockKeyTtl() {return $this->_lockTtl;}
 
-    /**
-     * Returns cache engine.
-     *
-     * @return null|Cache
-     */
-    public function getCacheEngine()
-    {
-        return $this->_cacheEngine;
-    }
+    /** Sets cache engine. @param Cache $cache */
+    public function setCacheEngine(Cache $cache) {$this->_cacheEngine = $cache;}
 
-    /**
-     * Sets cache engine.
-     *
-     * @param Cache $cache
-     */
-    public function setCacheEngine(Cache $cache)
-    {
-        $this->_cacheEngine = $cache;
-    }
+    /** Returns cache engine. @return null|Cache */
+    public function getCacheEngine() {return $this->_cacheEngine;}
 
     /**
      * Generates mutex key.
