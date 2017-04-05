@@ -28,7 +28,8 @@ Configure dogpile component.
 ```php
 'dogpile' => [
     'class'  => '\Hexspeak\Dogpile\Cache',
-    'useComponent' => 'cache',
+    'useComponent'   => 'cache',
+    'backupInterval' => 100,
     'mutexAccessor' => [
         'accessorClass' => '\Hexspeak\Dogpile\Mutexes\MutexAccessor',
         'timeToWait'    => 3000,
