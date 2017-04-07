@@ -9,7 +9,7 @@ Set mutex accessor dependencies that are required by a cache class via di contai
 );
 ```
 
-Specify a cache component in app configuration that will be used by dogpile component. Specify a cache class
+Specify a cache component in app configuration that will be used by dogpile component.
 ```php
 'cache' => [
       'class' => 'Hexspeak\Dogpile\Caching\Mixins\MemCache',
