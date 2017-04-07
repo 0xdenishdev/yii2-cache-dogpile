@@ -2,8 +2,13 @@
 
 namespace Hexspeak\Dogpile\Caching;
 
+/**
+ * Interface CacheInterface.
+ * Defines an interface that should be implemented by a specific cache.
+ *
+ * @package Hexspeak\Dogpile\Caching
+ */
 interface CacheInterface
 {
-    public function setAdp();
-    public function getAdp();
+    // TODO: Specify cache methods' stubs.
 }

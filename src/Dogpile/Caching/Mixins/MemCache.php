@@ -6,6 +6,12 @@ use yii\caching\MemCache as MemCacheAncestor;
 use Hexspeak\Dogpile\Caching\CacheInterface;
 use Hexspeak\Dogpile\Caching\Mutexes\MutexAccessorInterface;
 
+/**
+ * Class MemCache.
+ * Defines a memcached implementation of preventing dogpile effect.
+ *
+ * @package Hexspeak\Dogpile\Caching\Mixins
+ */
 class MemCache extends MemCacheAncestor implements CacheInterface
 {
     /**
@@ -23,16 +29,5 @@ class MemCache extends MemCacheAncestor implements CacheInterface
     {
         parent::__construct($config);
         $this->mutex = $mutexAccessor;
-    }
-
-    public function setAdp()
-    {
-        // TODO: Implement setAdp() method.
-        return $this->mutex;
-    }
-
-    public function getAdp()
-    {
-        // TODO: Implement getAdp() method.
     }
 }
