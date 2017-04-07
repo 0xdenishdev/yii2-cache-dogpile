@@ -1,11 +1,11 @@
 <?php
 
-namespace Hexspeak\Dogpile\Mutexes;
+namespace Hexspeak\Dogpile\Caching\Mutexes;
 
 /**
  * Interface MutexAccessorInterface.
  *
- * @package Hexspeak\Dogpile\Mutexes
+ * @package Hexspeak\Dogpile\Caching\Mutexes
  */
 interface MutexAccessorInterface
 {
