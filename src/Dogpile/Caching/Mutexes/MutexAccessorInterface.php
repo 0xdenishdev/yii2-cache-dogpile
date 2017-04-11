@@ -10,6 +10,9 @@ namespace Hexspeak\Dogpile\Caching\Mutexes;
  */
 interface MutexAccessorInterface
 {
+    /** Defines a locked mutex mode. */
+    const IS_LOCKED = 1;
+
     /**
      * Describes a behaviour of mutex lock.
      *
@@ -41,4 +44,12 @@ interface MutexAccessorInterface
      * @return bool
      */
     public function waitForUnlock($key);
+
+    /**
+     * Generates mutex lock key.
+     *
+     * @param mixed $key
+     * @return string
+     */
+    public function generateLockKey($key);
 }

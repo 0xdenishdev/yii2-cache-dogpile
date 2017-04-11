@@ -2,6 +2,8 @@
 
 namespace Hexspeak\Dogpile\Caching\Mutexes;
 
+use yii\caching\Cache;
+
 /**
  * Class Mutex.
  * Defines a default mutex behaviour.
@@ -10,6 +12,14 @@ namespace Hexspeak\Dogpile\Caching\Mutexes;
  */
 class MutexAccessor implements MutexAccessorInterface
 {
+
+    /**
+     * Defines cache engine.
+     *
+     * @var Cache $cache
+     */
+    protected $cache;
+
     /**
      * Defines default mutex cache key prefix.
      *
@@ -38,49 +48,97 @@ class MutexAccessor implements MutexAccessorInterface
      *
      * @var int $lockTtl
      */
-    protected $lockTtl         = 3600;
+    protected $lockTtl         = 5;
 
     /**
-     * Describes a behaviour of mutex lock.
+     * Sets time to wait.
      *
-     * @param mixed $key
-     * @return bool
+     * @param int $seconds
+     */
+    public function setTimeToWait($seconds)
+    {
+        $this->timeToWait = $seconds;
+    }
+
+    /**
+     * Sets wait interval.
+     *
+     * @param int $seconds
+     */
+    public function setWaitInterval($seconds)
+    {
+        $this->waitInterval = $seconds;
+    }
+
+    /**
+     * Sets lock time to live.
+     *
+     * @param int $seconds
+     */
+    public function setLockTtl($seconds)
+    {
+        $this->lockTtl = $seconds;
+    }
+
+    /**
+     * Sets cache engine.
+     *
+     * @param Cache $cache
+     */
+    public function setStorage(Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function lock($key)
     {
-        // TODO: Implement lock() method.
+        $mutexKey = $this->generateLockKey($key);
+        $this->cache->set($mutexKey, MutexAccessorInterface::IS_LOCKED, $this->lockTtl);
     }
 
     /**
-     * Describes a behaviour of mutex unlock.
-     *
-     * @param mixed $key
-     * @return bool
+     * @inheritdoc
      */
     public function unlock($key)
     {
-        // TODO: Implement unlock() method.
+        $mutexKey = $this->generateLockKey($key);
+        return $this->cache->delete($mutexKey);
     }
 
     /**
-     * Returns true whether a mutex is released.
-     *
-     * @param mixed $key
-     * @return bool
+     * @inheritdoc
      */
     public function isReleased($key)
     {
-        // TODO: Implement isReleased() method.
+        $mutexKey = $this->generateLockKey($key);
+        return ! $this->cache->get($mutexKey);
     }
 
     /**
-     * Signals whether a mutex has been released.
-     *
-     * @param mixed $key
-     * @return bool
+     * @inheritdoc
      */
     public function waitForUnlock($key)
     {
-        // TODO: Implement waitForUnlock() method.
+        $isUnlocked = $this->isReleased($key);
+        $totalSlept = 0;
+
+        while( ! $isUnlocked && $this->timeToWait > $totalSlept)
+        {
+            $totalSlept += $this->waitInterval;
+            usleep($this->waitInterval);
+        }
+
+        return $totalSlept < $this->timeToWait;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateLockKey($key)
+    {
+        return $this->mutexKeyPrefix . $key;
     }
 }

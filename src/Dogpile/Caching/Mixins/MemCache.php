@@ -29,5 +29,6 @@ class MemCache extends MemCacheAncestor implements CacheInterface
     {
         parent::__construct($config);
         $this->mutex = $mutexAccessor;
+        $this->mutex->setStorage($this);
     }
 }
