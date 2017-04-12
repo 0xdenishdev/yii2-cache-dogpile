@@ -15,8 +15,10 @@ class MutexAccessor implements MutexAccessorInterface
     /**
      * @inheritdoc
      */
-    public function lock($key)
+    public function lock($key, $lockTtl = null)
     {
+        $this->setLockTtl($lockTtl);
+
         $mutexKey = $this->generateLockKey($key);
         $this->cache->set($mutexKey, MutexAccessorInterface::IS_LOCKED, $this->lockTtl);
     }
@@ -42,8 +44,11 @@ class MutexAccessor implements MutexAccessorInterface
     /**
      * @inheritdoc
      */
-    public function waitForUnlock($key)
+    public function waitForUnlock($key, $ttwait = null, $interval = null)
     {
+        $this->setTimeToWait($ttwait);
+        $this->setWaitInterval($interval);
+
         $isUnlocked = $this->isReleased($key);
         $totalSlept = 0;
 

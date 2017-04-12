@@ -38,13 +38,13 @@ class MemCache extends MemCacheAncestor implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function setSafe($key, \Closure $closure, $expiresInSeconds = 3600, $lockTtl = 5)
+    public function setSafe($key, \Closure $closure, $expiresInSeconds = 3600, $lockTtl = 5, $timeToWait = null, $interval = null)
     {
-        $isMutexReleased = $this->mutex->waitForUnlock($key);
+        $isMutexReleased = $this->mutex->waitForUnlock($key, $timeToWait, $interval);
 
         if ($isMutexReleased)
         {
-            $this->mutex->lock($key);
+            $this->mutex->lock($key, $lockTtl);
 
             $backupKey = $this->generateBackupKey($key);
 
@@ -67,7 +67,7 @@ class MemCache extends MemCacheAncestor implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function getSafe($key, \Closure $closure, $expiresInSeconds = 3600, $lockTtl = 10)
+    public function getSafe($key, \Closure $closure, $expiresInSeconds = 3600, $lockTtl = 10, $timeToWait = null, $interval = null)
     {
         if (($value = $this->isAvailable($key)) !== false)
         {
@@ -75,7 +75,7 @@ class MemCache extends MemCacheAncestor implements CacheInterface
         }
 
         // In case of no cache, set from callable
-        if ( ! ($value = $this->setSafe($key, $closure, $expiresInSeconds, $lockTtl)))
+        if ( ! ($value = $this->setSafe($key, $closure, $expiresInSeconds, $lockTtl, $timeToWait, $interval)))
         {
             // If mutex has not been released yet, return stale cache from backup
             return $this->getValue($this->generateBackupKey($key));

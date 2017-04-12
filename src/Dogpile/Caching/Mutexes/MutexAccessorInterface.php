@@ -17,9 +17,10 @@ interface MutexAccessorInterface
      * Describes a behaviour of mutex lock.
      *
      * @param mixed $key
+     * @param int $lockTtl - lock key time to live
      * @return bool
      */
-    public function lock($key);
+    public function lock($key, $lockTtl = null);
 
     /**
      * Describes a behaviour of mutex unlock.
@@ -41,7 +42,10 @@ interface MutexAccessorInterface
      * Signals whether a mutex has been released.
      *
      * @param mixed $key
+     * @param int $ttwait   - wait time interval in which resource requester
+     *                        waiting in hold mode until the lock will be released.
+     * @param int $interval - interval in microseconds is used for periodic checking the lock status.
      * @return bool
      */
-    public function waitForUnlock($key);
+    public function waitForUnlock($key, $ttwait = null, $interval = null);
 }

@@ -35,7 +35,7 @@ trait MutexAwareTrait
     protected $timeToWait     = 3000;
 
     /**
-     * Defines default wait interval.
+     * Defines default wait interval in microseconds.
      * Wait interval is used for checking the lock status.
      *
      * @var int $waitInterval
@@ -56,17 +56,27 @@ trait MutexAwareTrait
      */
     public function setTimeToWait($seconds)
     {
+        if (is_null($seconds))
+        {
+            return;
+        }
+
         $this->timeToWait = $seconds;
     }
 
     /**
      * Sets wait interval.
      *
-     * @param int $seconds
+     * @param int $microseconds
      */
-    public function setWaitInterval($seconds)
+    public function setWaitInterval($microseconds)
     {
-        $this->waitInterval = $seconds;
+        if (is_null($microseconds))
+        {
+            return;
+        }
+
+        $this->waitInterval = $microseconds;
     }
 
     /**
@@ -76,6 +86,11 @@ trait MutexAwareTrait
      */
     public function setLockTtl($seconds)
     {
+        if (is_null($seconds))
+        {
+            return;
+        }
+
         $this->lockTtl = $seconds;
     }
 
