@@ -18,6 +18,13 @@ trait CacheAwareTrait
     protected $backupKeyPrefix = 'backup_';
 
     /**
+     * Defines backup interval in seconds.
+     *
+     * @var int $backupInterval
+     */
+    protected $backupInterval  = 10;
+
+    /**
      * Sets backup cache key prefix.
      *
      * @param string $prefix
@@ -51,5 +58,40 @@ trait CacheAwareTrait
             'data'       => $value,
             'expires_in' => time() + $ttl
         ];
+    }
+
+    /**
+     * Checks whether a value exists in cache and it has not been expired yet.
+     *
+     * @param mixed $key
+     * @return mixed
+     */
+    public function isAvailable($key)
+    {
+        // Check if value exists in cache
+        if (($value = $this->getValue($key)) === false)
+        {
+            return false;
+        }
+
+        // Check if cache was expired
+        if ($this->isExpired($value))
+        {
+            $this->delete($key);
+            return false;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Checks whether a value in cache is expired.
+     *
+     * @param array $value
+     * @return bool
+     */
+    protected function isExpired($value)
+    {
+        return $value['expires_in'] < time();
     }
 }

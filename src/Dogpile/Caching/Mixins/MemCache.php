@@ -3,8 +3,8 @@
 namespace Hexspeak\Dogpile\Caching\Mixins;
 
 use yii\caching\MemCache as MemCacheAncestor;
-use Hexspeak\Dogpile\Caching\CacheAwareTrait;
 use Hexspeak\Dogpile\Caching\CacheInterface;
+use Hexspeak\Dogpile\Caching\CacheAwareTrait;
 use Hexspeak\Dogpile\Caching\Mutexes\MutexAccessorInterface;
 
 /**
@@ -38,27 +38,51 @@ class MemCache extends MemCacheAncestor implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function setSafe($key, callable $callback, $ttl = 0)
+    public function setSafe($key, \Closure $closure, $expiresInSeconds = 3600, $lockTtl = 5)
     {
-        // TODO: Implement setSafe() method.
+        $isMutexReleased = $this->mutex->waitForUnlock($key);
+
+        if ($isMutexReleased)
+        {
+            $this->mutex->lock($key);
+
+            $backupKey = $this->generateBackupKey($key);
+
+            $callbackResult = call_user_func($closure, $this);
+            $cached = $this->assembleValue($callbackResult, $expiresInSeconds);
+
+            // Set actual data
+            $this->setValue($key, $cached, 0);
+            // Set backup data
+            $this->setValue($backupKey, $callbackResult, $expiresInSeconds + $lockTtl + $this->backupInterval);
+
+            $this->mutex->unlock($key);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * @inheritdoc
      */
-    public function getSafe($key, callable $callback)
+    public function getSafe($key, \Closure $closure, $expiresInSeconds = 3600, $lockTtl = 10)
     {
-        // TODO: Implement getSafe() method.
-    }
+        if (($value = $this->isAvailable($key)) !== false)
+        {
+            return $value;
+        }
 
-    /**
-     * @inheritdoc
-     */
-    public function assembleValue($value, $ttl = 0)
-    {
-        return [
-            'data'       => $value,
-            'expires_in' => time() + $ttl
-        ];
+        // In case of no cache, set from callable
+        if ( ! ($value = $this->setSafe($key, $closure, $expiresInSeconds, $lockTtl)))
+        {
+            // If mutex has not been released yet, return stale cache from backup
+            $backup = $this->getValue($this->generateBackupKey($key));
+            return $this->getValue($backup);
+        }
+
+        // Else return actual data
+        return $this->getValue($key);
     }
 }
