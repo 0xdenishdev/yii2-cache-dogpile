@@ -27,7 +27,7 @@ trait MutexAwareTrait
     protected $mutexKeyPrefix = 'mutex_';
 
     /**
-     * Defines default wait time interval in which resource requester
+     * Defines default wait time interval in seconds in which resource requester
      * waiting in hold mode until the lock will be released.
      *
      * @var int $timeToWait
@@ -35,7 +35,7 @@ trait MutexAwareTrait
     protected $timeToWait     = 3000;
 
     /**
-     * Defines default wait interval.
+     * Defines default wait interval in microseconds.
      * Wait interval is used for checking the lock status.
      *
      * @var int $waitInterval
@@ -62,11 +62,11 @@ trait MutexAwareTrait
     /**
      * Sets wait interval.
      *
-     * @param int $seconds
+     * @param int $microseconds
      */
-    public function setWaitInterval($seconds)
+    public function setWaitInterval($microseconds)
     {
-        $this->waitInterval = $seconds;
+        $this->waitInterval = $microseconds;
     }
 
     /**
