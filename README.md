@@ -28,5 +28,8 @@ Simple use in code via component name.
 ```php
 /** @var \Hexspeak\Dogpile\Caching\Mixins\MemCache $cache */
 $cache = \yii::$app->cache;
-$cache-> ... [set, get, etc.]
+$cache->getSafe('some_key', function() {
+    // Do some heavy stuff.
+    return $result;
+});
 ```
