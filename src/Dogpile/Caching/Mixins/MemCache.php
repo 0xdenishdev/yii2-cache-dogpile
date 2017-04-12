@@ -82,6 +82,6 @@ class MemCache extends MemCacheAncestor implements CacheInterface
         }
 
         // Else return actual data
-        return $this->getValue($key);
+        return $this->getValue($key)['data'];
     }
 }

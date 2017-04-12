@@ -81,7 +81,7 @@ trait CacheAwareTrait
             return false;
         }
 
-        return $value;
+        return $value['data'];
     }
 
     /**
