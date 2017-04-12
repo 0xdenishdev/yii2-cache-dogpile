@@ -78,8 +78,7 @@ class MemCache extends MemCacheAncestor implements CacheInterface
         if ( ! ($value = $this->setSafe($key, $closure, $expiresInSeconds, $lockTtl)))
         {
             // If mutex has not been released yet, return stale cache from backup
-            $backup = $this->getValue($this->generateBackupKey($key));
-            return $this->getValue($backup);
+            return $this->getValue($this->generateBackupKey($key));
         }
 
         // Else return actual data
