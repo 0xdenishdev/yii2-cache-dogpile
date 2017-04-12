@@ -44,12 +44,4 @@ interface MutexAccessorInterface
      * @return bool
      */
     public function waitForUnlock($key);
-
-    /**
-     * Generates mutex lock key.
-     *
-     * @param mixed $key
-     * @return string
-     */
-    public function generateLockKey($key);
 }

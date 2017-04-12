@@ -28,13 +28,4 @@ interface CacheInterface
      * @return mixed
      */
     public function getSafe($key, callable $callback);
-
-    /**
-     * Returns cache value composed with expire data.
-     *
-     * @param mixed $value
-     * @param int $ttl
-     * @return array
-     */
-    public function assembleValue($value, $ttl = 0);
 }
