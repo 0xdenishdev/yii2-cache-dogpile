@@ -1,12 +1,12 @@
 <?php
 
-namespace Hexspeak\Dogpile\Caching;
+namespace Oxhexspeak\Dogpile\Caching;
 
 /**
  * Interface CacheInterface.
  * Defines an interface that should be implemented by a specific cache.
  *
- * @package Hexspeak\Dogpile\Caching
+ * @package Oxhexspeak\Dogpile\Caching
  */
 interface CacheInterface
 {

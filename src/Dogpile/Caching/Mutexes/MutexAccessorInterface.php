@@ -1,12 +1,12 @@
 <?php
 
-namespace Hexspeak\Dogpile\Caching\Mutexes;
+namespace Oxhexspeak\Dogpile\Caching\Mutexes;
 
 /**
  * Interface MutexAccessorInterface.
  * Defines an interface that should be implemented by a specific mutex.
  *
- * @package Hexspeak\Dogpile\Caching\Mutexes
+ * @package Oxhexspeak\Dogpile\Caching\Mutexes
  */
 interface MutexAccessorInterface
 {

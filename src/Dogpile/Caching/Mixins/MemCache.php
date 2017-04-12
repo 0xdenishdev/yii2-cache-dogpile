@@ -1,17 +1,17 @@
 <?php
 
-namespace Hexspeak\Dogpile\Caching\Mixins;
+namespace Oxhexspeak\Dogpile\Caching\Mixins;
 
 use yii\caching\MemCache as MemCacheAncestor;
-use Hexspeak\Dogpile\Caching\CacheInterface;
-use Hexspeak\Dogpile\Caching\CacheAwareTrait;
-use Hexspeak\Dogpile\Caching\Mutexes\MutexAccessorInterface;
+use Oxhexspeak\Dogpile\Caching\CacheInterface;
+use Oxhexspeak\Dogpile\Caching\CacheAwareTrait;
+use Oxhexspeak\Dogpile\Caching\Mutexes\MutexAccessorInterface;
 
 /**
  * Class MemCache.
  * Defines a memcached implementation of preventing dogpile effect.
  *
- * @package Hexspeak\Dogpile\Caching\Mixins
+ * @package Oxhexspeak\Dogpile\Caching\Mixins
  */
 class MemCache extends MemCacheAncestor implements CacheInterface
 {

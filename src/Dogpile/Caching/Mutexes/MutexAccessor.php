@@ -1,12 +1,12 @@
 <?php
 
-namespace Hexspeak\Dogpile\Caching\Mutexes;
+namespace Oxhexspeak\Dogpile\Caching\Mutexes;
 
 /**
  * Class Mutex.
  * Defines a default mutex behaviour.
  *
- * @package Hexspeak\Dogpile\Caching\Mutexes
+ * @package Oxhexspeak\Dogpile\Caching\Mutexes
  */
 class MutexAccessor implements MutexAccessorInterface
 {

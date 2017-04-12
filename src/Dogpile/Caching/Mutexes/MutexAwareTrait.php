@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexspeak\Dogpile\Caching\Mutexes;
+namespace Oxhexspeak\Dogpile\Caching\Mutexes;
 
 use yii\caching\Cache;
 
@@ -8,7 +8,7 @@ use yii\caching\Cache;
  * Class MutexAwareTrait.
  * Describes general layer which should be used by specific mutex accessor.
  *
- * @package Hexspeak\Dogpile\Caching\Mutexes
+ * @package Oxhexspeak\Dogpile\Caching\Mutexes
  */
 trait MutexAwareTrait
 {

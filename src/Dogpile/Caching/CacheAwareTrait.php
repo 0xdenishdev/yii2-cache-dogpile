@@ -1,12 +1,12 @@
 <?php
 
-namespace Hexspeak\Dogpile\Caching;
+namespace Oxhexspeak\Dogpile\Caching;
 
 /**
  * Class CacheAwareTrait.
  * Describes general layer which should be used by specific cache storage.
  *
- * @package Hexspeak\Dogpile\Caching
+ * @package Oxhexspeak\Dogpile\Caching
  */
 trait CacheAwareTrait
 {

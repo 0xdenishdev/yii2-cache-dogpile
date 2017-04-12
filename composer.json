@@ -1,5 +1,5 @@
 {
-  "name": "hexspeak/yii2-cache-dogpile",
+  "name": "0xhexspeak/yii2-cache-dogpile",
   "description": "Yii2 component designed for solving dogpile cache issues.",
   "keywords": [
     "yii2",
@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Hexspeak\\Dogpile\\": "src/Dogpile"
+      "Oxhexspeak\\Dogpile\\": "src/Dogpile"
     }
   }
 }
